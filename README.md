@@ -395,7 +395,7 @@ Guide](https://developer.apple.com/library/ios/documentation/FileManagement/Conc
 ### Does the OS protect the keychain? How?
 
 The keychain, on modern iOS devices (post-Touch ID) is secured using a [hardware
-module](https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=secure%20enclave).
+module](https://www.google.com/search?q=secure+enclave).
 There are no known attacks that directly compromise the keychain via hardware or
 software; jailbroken devices are vulnerable to certain attacks.
 
