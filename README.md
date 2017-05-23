@@ -162,8 +162,7 @@ HTTP connections. Review that the ATS configuration is correct.
 > **Audit tip:** Check that the list of HTTPS domains in the `Info.plist` is
 > correct.
 
-For iOS 10, since the end of 2016, ATS is required. In iOS 10, some new
-exceptions are available:
+In iOS 10, some new exceptions are available:
 
 1. Exception for streaming media using `AVFoundation`
 
