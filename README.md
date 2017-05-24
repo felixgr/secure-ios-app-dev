@@ -12,7 +12,7 @@ Checking whether a device is jailbroken or not . Attacker can run tools like Cyc
 
 > **Audit tip:** Must ensure the application not working on jaibroken device. Use below code for jaibroken test.
 
-``` Objective c sample snippet.
+``` Objective c sample code snippet.
 +(BOOL)isJailbroken{
  
 #if !(TARGET_IPHONE_SIMULATOR)
