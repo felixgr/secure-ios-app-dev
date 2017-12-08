@@ -140,6 +140,13 @@ use-after-release, and other bugs.
 
 > **Audit tip:** Check the output of Xcode’s "Build & Analyze"
 
+### Hardening: Check that support for third party keyboards is disabled
+
+By default, iOS8+ allows third-party applications to override the built-in
+keyboard with may leak keystrokes or words to untrusted parties. Depending on
+the application risk profile, this may be both a Security and Compliance issue.
+This is how it can be [disabled in Swift](https://stackoverflow.com/questions/34863291/how-does-one-disable-third-party-keyboards-in-swift).
+
 ## Network-level issues
 
 ### Networking: Use GTMSessionFetcher communication securely
