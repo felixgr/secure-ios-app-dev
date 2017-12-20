@@ -545,48 +545,45 @@ prevent backup of files to iCloud and iTunes.
 > does only contain settings and no personal information.
 
 
-## Jaibroken Test
+## Testing for Devices with Jaibreak
 
-Checking whether a device is jailbroken or not can be helpful to make certain in-app security decisions. Attacker can run tools like Cycript, GDB, Snoop-it etc to perform runtime analysis and steal sensitive data from within your application.
+Checking whether a device is jailbroken can be helpful to make certain in-app security decisions. Attackers can run tools like Cycript, GDB, or Snoop-it to perform runtime analysis and steal sensitive data from within your application. Jailbreak detection can prevent that.
 
-> **Audit tip:** Must ensure the application not working on jaibroken device. Use below code for jaibroken test.
+> **Audit tip:** Test that the app is not working on jaibroken devices.
 
-``` Objective c sample code snippet.
+Below is sample code for testing if a device is jailbroken. Note however that Jailbreak tests can be circumvented by skilled attackers and apps should not rely solely on Jailbreak detection as a security control.
+
+```objc
 +(BOOL)isJailbroken{
- 
 #if !(TARGET_IPHONE_SIMULATOR)
+  if ([[NSFileManager defaultManager] fileExistsAtPath:@"/Applications/Cydia.app"]){
+    return YES;
+  }else if([[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/MobileSubstrate.dylib"]){
+    return YES;
+  }else if([[NSFileManager defaultManager] fileExistsAtPath:@"/bin/bash"]){
+    return YES;
+  }else if([[NSFileManager defaultManager] fileExistsAtPath:@"/usr/sbin/sshd"]){
+    return YES;
+  }else if([[NSFileManager defaultManager] fileExistsAtPath:@"/etc/apt"]){
+    return YES;
+  }
  
-if ([[NSFileManager defaultManager] fileExistsAtPath:@"/Applications/Cydia.app"]){
-return YES;
-}else if([[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/MobileSubstrate.dylib"]){
-return YES;
-}else if([[NSFileManager defaultManager] fileExistsAtPath:@"/bin/bash"]){
-return YES;
-}else if([[NSFileManager defaultManager] fileExistsAtPath:@"/usr/sbin/sshd"]){
-return YES;
-}else if([[NSFileManager defaultManager] fileExistsAtPath:@"/etc/apt"]){
-return YES;
-}
+  NSError *error;
+  NSString *stringToBeWritten = @"This is a test.";
+  [stringToBeWritten writeToFile:@"/private/jailbreak.txt" atomically:YES encoding:NSUTF8StringEncoding error:&amp;error];
+  if(error==nil){
+    return YES;
+  } else {
+    [[NSFileManager defaultManager] removeItemAtPath:@"/private/jailbreak.txt" error:nil];
+  }
  
-NSError *error;
-NSString *stringToBeWritten = @"This is a test.";
-[stringToBeWritten writeToFile:@"/private/jailbreak.txt" atomically:YES
-encoding:NSUTF8StringEncoding error:&amp;error];
-if(error==nil){
-// Device is jailbroken
-return YES;
-} else {
-[[NSFileManager defaultManager] removeItemAtPath:@"/private/jailbreak.txt" error:nil];
-}
- 
-if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"cydia://package/com.example.package"]]){
-// Device is jailbroken
-return YES;
-}
+  if([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"cydia://package/com.example.package"]]){
+    return YES;
+  }
 #endif
  
-// All checks have failed. Most probably, the device is not jailbroken
-return NO;
+  // All checks have failed. Most probably, the device is not jailbroken.
+  return NO;
 }
 ```
 
