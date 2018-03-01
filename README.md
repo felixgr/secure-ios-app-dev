@@ -302,8 +302,20 @@ If you are using `WKWebView` you'll need to use the
 
 > **Audit tip:** Check how the `UIWebView`/`WKWebView` is handling strings because attacks
 > similar to XSS can occur. An XSS in a `UIWebView` can potentially leak local files, for
-> example the address book. Also make sure that the WebView is not prone to
+> example the address book and BinaryCookies. Also make sure that the WebView is not prone to
 > redirection which can be utilized for phishing.
+
+### IO: Avoid local HTML preview with UIWebView
+
+> **Audio tip:** Check if file preview functionality is implement with UIWebView. It has
+> the same impact with XSS, except the whole page is under control of attackers. Since the
+> origin is `file://`, UIWebView allows read local files and send AJAX request to arbitrary
+> third party websites.
+>
+> Make sure to use
+> [QLPreviewController](https://developer.apple.com/documentation/quicklook/qlpreviewcontroller)
+> to preview file attachments. It disables javascript on iOS <=9, otherwise it uses WKWebView
+> which doesn't allow local file and cross domain internet access by default.
 
 ## Memory corruption issues
 
