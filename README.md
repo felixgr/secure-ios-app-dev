@@ -595,6 +595,10 @@ Checking whether a device is jailbroken can be helpful to make certain in-app se
 
 > **Audit tip:** Test that the app is not working on jaibroken devices.
 
+<!--
+
+NOTE(felixgr): this code isn't great but we're also not in the business of JB detection so let's just comment it out.
+
 Below is sample code for testing if a device is jailbroken. Note however that Jailbreak tests can be circumvented by skilled attackers and apps should not rely solely on Jailbreak detection as a security control.
 
 ```objc
@@ -631,3 +635,4 @@ Below is sample code for testing if a device is jailbroken. Note however that Ja
 }
 ```
 
+--->
