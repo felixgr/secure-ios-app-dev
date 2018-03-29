@@ -26,7 +26,7 @@ Correct example:
 ### API: Prevent leaking sensitive data during app backgrounding
 
 When iOS backgrounds an app, a screenshot of the app might get saved to an
-unencrypted cache on the local file system. This happends for example when the user
+unencrypted cache on the local file system. This happens for example when the user
 presses the home button. Apple recommends developers to hide any sensitive
 information before this occurs.
 
