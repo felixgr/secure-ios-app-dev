@@ -25,10 +25,11 @@ Correct example:
 
 ### API: Prevent leaking sensitive data during app backgrounding
 
-When iOS backgrounds an app, a screenshot of the app might get saved to an
+When iOS backgrounds an app, a screenshot of the app used to get saved to an
 unencrypted cache on the local file system. This happens for example when the user
 presses the home button. Apple recommends developers to hide any sensitive
-information before this occurs.
+information before this occurs. However, when testing iOS 10, the screenshot
+is stored in the encrypted app sandbox. Therefore it is less of a risk.
 
 If the app is handling sensitive user data, verify that code exists to hide or blur the sensitive elements or the full window.
 
@@ -303,8 +304,10 @@ If you are using `WKWebView` you'll need to use the
 
 > **Audit tip:** Check how the `UIWebView`/`WKWebView` is handling strings because attacks
 > similar to XSS can occur. An XSS in a `UIWebView` can potentially leak local files, for
-> example the address book and BinaryCookies. Also make sure that the WebView is not prone to
-> redirection which can be utilized for phishing.
+> example the address book and cookies. XSS in `WKWebView` is more restricted because
+> `AllowUniversalAccessFromFileURLs` and `AllowFileAccessFromFileURLs` are off by default.
+> Also make sure that the WebView is not prone to redirection which can be utilized for
+> phishing.
 
 ### IO: Avoid local HTML preview with UIWebView
 
@@ -574,7 +577,7 @@ used:
 ### Avoid insecure destination files and APIs
 
 > **Audit tip:** Check for private information (PII) in NSLog/Alog, plist or
-> local sqlite databases. It may not be encrypted.
+> local sqlite databases. It may not be encrypted. Logging is encrypted as of iOS 10.
 
 > **Audit tip:** Check that only appropriate user-specific non-sensitive
 information is written to iCloud storage. Use `NSURLIsExcludedFromBackupKey` to
