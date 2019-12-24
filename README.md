@@ -592,9 +592,9 @@ prevent backup of files to iCloud and iTunes.
 > does only contain settings and no personal information.
 
 
-## Testing for Devices with Jaibreak
+## Testing for Devices with Jailbreak
 
-Checking whether a device is jailbroken can be helpful to make certain in-app security decisions. Attackers can run tools like Cycript, GDB, or Snoop-it to perform runtime analysis and steal sensitive data from within your application. Jailbreak detection can prevent that.
+Checking whether a device is jailbroken can be helpful to make certain in-app security decisions. Attackers can run tools like Cycript, Frida, GDB, or Snoop-it to perform runtime analysis and steal sensitive data from within your application. Jailbreak detection can prevent that.
 
 > **Audit tip:** Test that the app is not working on jaibroken devices.
 
